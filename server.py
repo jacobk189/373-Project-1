@@ -11,15 +11,18 @@ serverSocket = socket(AF_INET, SOCK_DGRAM)
 
 # Bind socket to local port number 12000
 serverSocket.bind(('', serverPort))
-
+print('server running')
 msg, addr = serverSocket.recvfrom(2048)
+msg = msg.decode()
 
 fname = 'index.html'
 
 if (msg != fname):
-    serverSocket.sendto('404', addr)
+    serverSocket.sendto('404'.encode(), addr)
 else:
-    serverSocket.sendto('200', addr)
+    serverSocket.sendto('200'.encode(), addr)
     #serverSocket.sendto(fname, addr)
+
+input('enter to close')
 
 
