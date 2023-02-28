@@ -14,7 +14,7 @@ serverSocket.bind(('', serverPort))
 
 msg, addr = serverSocket.recvfrom(2048)
 
-fname = "index.html"
+fname = 'index.html'
 
 if (msg != fname):
     serverSocket.sendto('404', addr)
