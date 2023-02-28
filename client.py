@@ -17,7 +17,7 @@ else:
     fileName = defaultFile
 
 clientSocket = socket(AF_INET, SOCK_DGRAM)
-clientSocket.sendto(fileName)
+clientSocket.sendto(fileName) #will need to add command type ex) GET filename
 msg, addr = clientSocket.recvfrom(2048)
 
 if(msg == 200):
