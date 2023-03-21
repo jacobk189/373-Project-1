@@ -2,6 +2,7 @@
 from socket import *
 import sys
 serverPort = 12000
+buffer_size = 2048
 
     # Read html file into string
 def readHTML(inFile):
@@ -38,6 +39,15 @@ if (msg != fname):
 else:
     serverSocket.sendto('200'.encode(), addr)
     file_data = readHTML(fname)
+    i = 0
+    while i < len(file_data):
+        if(i+buffer_size<len(file_data)-1):
+            msg = file_data[i:i+buffer_size]
+        else:
+            msg = file_data[i:len(file_data)-1]
+        i = i+buffer_size
+        serverSocket.sentto(msg.encode(), addr)
+
     serverSocket.sendto(file_data.encode(), addr)
     #serverSocket.sendto(fname, addr)
 
