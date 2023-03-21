@@ -15,7 +15,17 @@ print('server running')
 msg, addr = serverSocket.recvfrom(2048)
 msg = msg.decode()
 
+
 fname = 'index.html'
+defaultPort = 12000
+
+if len(sys.argv) == 4:
+    serverPort = int(sys.argv[2])
+    fileName = sys.argv[3]
+
+else:
+    serverPort = defaultPort
+    fileName = fname
 
 if (msg != fname):
     serverSocket.sendto('404'.encode(), addr)
