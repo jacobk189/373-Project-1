@@ -24,6 +24,8 @@ if(msg == '200'):
     print('got that bish')
     msg, Serveraddr = clientSocket.recvfrom(2048)
     msg = msg.decode()
+    print(msg)
+    #Parse the file 
     input('enter to close')
     #clientSocket.recvfrom(2048)
 elif(msg == '404'):
