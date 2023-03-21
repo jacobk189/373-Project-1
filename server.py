@@ -2,7 +2,7 @@
 from socket import *
 import sys
 serverPort = 12000
-buffer_size = 200
+buffer_size = 2048
 
     # Read html file into string
 def readHTML(inFile):
@@ -47,6 +47,7 @@ else:
             msg = file_data[i:len(file_data)-1]
         i = i+buffer_size
         serverSocket.sendto(msg.encode(), addr)
+    
     msg = 'done'
     serverSocket.sendto(msg.encode(), addr)
     #serverSocket.sendto(fname, addr)
