@@ -2,7 +2,7 @@
 from socket import *
 import sys
 serverPort = 12000
-buffer_size = 2048
+buffer_size = 200
 
     # Read html file into string
 def readHTML(inFile):
