@@ -22,6 +22,8 @@ msg = msg.decode()
 
 if(msg == '200'):
     print('got that bish')
+    msg, Serveraddr = clientSocket.recvfrom(2048)
+    msg = msg.decode()
     input('enter to close')
     #clientSocket.recvfrom(2048)
 elif(msg == '404'):
@@ -29,8 +31,3 @@ elif(msg == '404'):
     input('enter to close')
     sys.exit()
 
-    # Read html file into string
-#def readHTML(inFile):
-	#with open(inFile, 'r', encoding='utf8') as htmlfile:
-		#data = htmlfile.read()
-	#return data
