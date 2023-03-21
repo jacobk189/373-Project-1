@@ -48,7 +48,7 @@ else:
         i = i+buffer_size
         serverSocket.sendto(msg.encode(), addr)
     msg = 'done'
-    serverSocket.sendto(msg, addr)
+    serverSocket.sendto(msg.encode(), addr)
     #serverSocket.sendto(fname, addr)
 
 input('enter to close')
