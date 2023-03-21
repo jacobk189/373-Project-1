@@ -28,3 +28,9 @@ elif(msg == '404'):
     print('did not find that hoe')
     input('enter to close')
     sys.exit()
+
+    # Read html file into string
+#def readHTML(inFile):
+	#with open(inFile, 'r', encoding='utf8') as htmlfile:
+		#data = htmlfile.read()
+	#return data
