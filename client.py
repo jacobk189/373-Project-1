@@ -5,6 +5,10 @@ defaultFile = 'index.html'
 defaultPort = 12000
 defaultName = '127.0.0.1'
 
+def parse(data):
+    arr = data.split('href=')
+    print(arr)
+
 if len(sys.argv) == 4:
     serverName = sys.argv[1]
     serverPort = int(sys.argv[2])
@@ -19,14 +23,15 @@ clientSocket = socket(AF_INET, SOCK_DGRAM)
 clientSocket.sendto(fileName.encode(), (serverName, serverPort)) #will need to add command type ex) GET filename
 msg, Serveraddr = clientSocket.recvfrom(2048)
 msg = msg.decode()
-
+filedata = ''
 if(msg == '200'):
     print('got that bish')
     while(msg != 'done'):
         msg, Serveraddr = clientSocket.recvfrom(2048)
         msg = msg.decode()
+        filedata+=msg
         print(msg)
-    #Parse the file 
+    parse(filedata)
     input('enter to close')
     #clientSocket.recvfrom(2048)
 elif(msg == '404'):
