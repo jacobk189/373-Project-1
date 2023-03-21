@@ -30,7 +30,6 @@ if(msg == '200'):
         msg, Serveraddr = clientSocket.recvfrom(2048)
         msg = msg.decode()
         filedata+=msg
-        print(msg)
     parse(filedata)
     input('enter to close')
     #clientSocket.recvfrom(2048)
