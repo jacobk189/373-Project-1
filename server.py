@@ -3,6 +3,12 @@ from socket import *
 import sys
 serverPort = 12000
 
+    # Read html file into string
+def readHTML(inFile):
+	with open(inFile, 'r', encoding='utf8') as htmlfile:
+		data = htmlfile.read()
+	return data
+
 #connection_type = input('What type of connection are you running? 1 for UDP 1 connection. 2 for TCP 1 connection. 3 for UDP 5 parallel connections. 4 for TCP 5 parallel connections.\n')
 #do some if statments for each input
 
@@ -31,8 +37,9 @@ if (msg != fname):
     serverSocket.sendto('404'.encode(), addr)
 else:
     serverSocket.sendto('200'.encode(), addr)
+    file_data = readHTML(fname)
+    serverSocket.sendto(file_data.encode(), addr)
     #serverSocket.sendto(fname, addr)
 
 input('enter to close')
-
 

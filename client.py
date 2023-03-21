@@ -30,4 +30,3 @@ elif(msg == '404'):
     print('did not find that hoe')
     input('enter to close')
     sys.exit()
-
