@@ -6,7 +6,7 @@ defaultPort = 12000
 defaultName = '127.0.0.1'
 
 def parse(data):
-    arr = data.split('href=')
+    arr = str(data).split('href=')
     print(arr)
 
 if len(sys.argv) == 4:
