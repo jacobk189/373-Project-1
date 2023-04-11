@@ -6,11 +6,23 @@ defaultFile = 'index.html'
 defaultPort = 3905
 defaultName = 'compsci04.snc.edu'
 
+class MyHTMLParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.links = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag == 'a':
+            for attr in attrs:
+                if attr[0] == 'href':
+                    print("found one")
+                    self.links.append(attr[1])
+
 def handledata(filedata):
-    parser = HTMLParser()
+    parser = MyHTMLParser()
     parser.feed(filedata)
-    parser.handle_starttag('a', [('href')])
-    print(parser.get_starttag_text())
+    links = parser.links
+    print(links)
 
 if len(sys.argv) == 4:
     serverName = sys.argv[1]
