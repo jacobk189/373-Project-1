@@ -1,13 +1,16 @@
 from socket import * #include Python's socket library
 import sys
+from html.parser import HTMLParser
 
 defaultFile = 'index.html'
-defaultPort = 3509
-defaultName = '138.74.63.8'
+defaultPort = 3905
+defaultName = 'compsci04.snc.edu'
 
-def parse(data):
-    arr = str(data).split('href=')
-    print(arr)
+def handledata(filedata):
+    parser = HTMLParser()
+    parser.feed(filedata)
+    parser.handle_starttag('a', [('href')])
+    print(parser.get_starttag_text())
 
 if len(sys.argv) == 4:
     serverName = sys.argv[1]
@@ -29,8 +32,10 @@ if(msg == '200'):
     while(msg != 'done'):
         msg, Serveraddr = clientSocket.recvfrom(2048)
         msg = msg.decode()
-        filedata+=msg
-    parse(filedata)
+        #print(msg)
+        filedata = filedata + msg
+    #parse(filedata)
+    handledata(filedata)
     input('enter to close')
     #clientSocket.recvfrom(2048)
 elif(msg == '404'):

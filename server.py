@@ -1,12 +1,12 @@
 # UDPserver
 from socket import *
 import sys
-serverPort = 3509
+serverPort = 3905
 buffer_size = 200
 
     # Read html file into string
 def readHTML(inFile):
-	with open(inFile, 'r', encoding='utf8') as htmlfile:
+	with open(inFile, 'r',encoding='utf-8') as htmlfile:
 		data = htmlfile.read()
 	return data
 
@@ -24,7 +24,7 @@ msg = msg.decode()
 
 
 fname = 'index.html'
-defaultPort = 3509
+defaultPort = 3905
 
 if len(sys.argv) == 4:
     serverPort = int(sys.argv[2])
@@ -38,6 +38,7 @@ if (msg != fname):
     serverSocket.sendto('404'.encode(), addr)
 else:
     serverSocket.sendto('200'.encode(), addr)
+    print("sent 200")
     file_data = readHTML(fname)
     i = 0
     while i < len(file_data):
@@ -47,9 +48,11 @@ else:
             msg = file_data[i:len(file_data)-1]
         i = i+buffer_size
         serverSocket.sendto(msg.encode(), addr)
+        print("sent from server: ", msg)
     
     msg = 'done'
     serverSocket.sendto(msg.encode(), addr)
+    print("after sent file")
     #serverSocket.sendto(fname, addr)
 
 input('enter to close')
