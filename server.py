@@ -1,7 +1,7 @@
 # UDPserver
 from socket import *
 import sys
-serverPort = 12000
+serverPort = 3509
 buffer_size = 200
 
     # Read html file into string
@@ -24,7 +24,7 @@ msg = msg.decode()
 
 
 fname = 'index.html'
-defaultPort = 12000
+defaultPort = 3509
 
 if len(sys.argv) == 4:
     serverPort = int(sys.argv[2])

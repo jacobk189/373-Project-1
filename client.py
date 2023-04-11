@@ -2,8 +2,8 @@ from socket import * #include Python's socket library
 import sys
 
 defaultFile = 'index.html'
-defaultPort = 12000
-defaultName = '127.0.0.1'
+defaultPort = 3509
+defaultName = '138.74.63.8'
 
 def parse(data):
     arr = str(data).split('href=')
