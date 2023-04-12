@@ -20,7 +20,7 @@ serverSocket = socket(AF_INET, SOCK_DGRAM)
 serverSocket.bind(('', serverPort))
 print('server running')
 msg, addr = serverSocket.recvfrom(2048)
-msg = msg.decode()
+msg = msg.decode('utf-8')
 
 
 fname = 'index.html'
@@ -51,7 +51,7 @@ else:
         print("sent from server: ", msg)
     
     msg = 'done'
-    serverSocket.sendto(msg.encode(), addr)
+    serverSocket.sendto(msg.encode('utf-8'), addr)
     print("after sent file")
     #serverSocket.sendto(fname, addr)
 
