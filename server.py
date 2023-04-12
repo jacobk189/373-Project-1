@@ -47,7 +47,7 @@ else:
         else:
             msg = file_data[i:len(file_data)-1]
         i = i+buffer_size
-        serverSocket.sendto(msg.encode(), addr)
+        serverSocket.sendto(msg.encode('utf-8'), addr)
         print("sent from server: ", msg)
     
     msg = 'done'

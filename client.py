@@ -12,11 +12,11 @@ class MyHTMLParser(HTMLParser):
         self.links = []
 
     def handle_starttag(self, tag, attrs):
-        if tag == 'a':
-            for attr in attrs:
-                if attr[0] == 'href':
+        if tag == 'img':
+            for name,value in attrs:
+                if name == 'src':
                     print("found one")
-                    self.links.append(attr[1])
+                    self.links.append(value)
 
 def handledata(filedata):
     parser = MyHTMLParser()
@@ -37,19 +37,17 @@ else:
 clientSocket = socket(AF_INET, SOCK_DGRAM)
 clientSocket.sendto(fileName.encode(), (serverName, serverPort)) #will need to add command type ex) GET filename
 msg, Serveraddr = clientSocket.recvfrom(2048)
-msg = msg.decode()
+msg = msg.decode('utf-8')
 filedata = ''
 if(msg == '200'):
     print('got that bish')
     while(msg != 'done'):
         msg, Serveraddr = clientSocket.recvfrom(2048)
-        msg = msg.decode()
-        #print(msg)
+        msg = msg.decode('utf-8')
         filedata = filedata + msg
-    #parse(filedata)
+    print(filedata)
     handledata(filedata)
     input('enter to close')
-    #clientSocket.recvfrom(2048)
 elif(msg == '404'):
     print('did not find that hoe')
     input('enter to close')
