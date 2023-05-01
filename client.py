@@ -42,9 +42,14 @@ filedata = ''
 if(msg == '200'):
     print('got that bish')
     while(msg != 'done'):
-        msg, Serveraddr = clientSocket.recvfrom(2048)
-        msg = msg.decode('utf-8')
-        filedata = filedata + msg
+        try:
+            clientSocket.settimeout(2)
+            msg, Serveraddr = clientSocket.recvfrom(2048)
+            msg = msg.decode('utf-8')
+            filedata = filedata + msg          
+        except socket.timeout:
+            break #might lose data? but need in case we miss done
+
     print(filedata)
     handledata(filedata)
     input('enter to close')

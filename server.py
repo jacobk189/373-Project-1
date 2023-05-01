@@ -6,7 +6,7 @@ buffer_size = 200
 
     # Read html file into string
 def readHTML(inFile):
-	with open(inFile, 'r',encoding='utf-8') as htmlfile:
+	with open(inFile, 'r') as htmlfile:
 		data = htmlfile.read()
 	return data
 
@@ -47,7 +47,7 @@ else:
         else:
             msg = file_data[i:len(file_data)-1]
         i = i+buffer_size
-        serverSocket.sendto(msg.encode('utf-8'), addr)
+        serverSocket.sendto(msg.encode('utf-8'), addr, errors='ignore')
         print("sent from server: ", msg)
     
     msg = 'done'
