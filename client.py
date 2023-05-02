@@ -35,7 +35,7 @@ else:
     fileName = defaultFile
 
 clientSocket = socket(AF_INET, SOCK_DGRAM)
-clientSocket.sendto(fileName.encode(), (serverName, serverPort)) #will need to add command type ex) GET filename
+clientSocket.sendto(fileName.encode('utf-8'), (serverName, serverPort)) #will need to add command type ex) GET filename
 msg, Serveraddr = clientSocket.recvfrom(2048)
 msg = msg.decode('utf-8')
 filedata = ''
