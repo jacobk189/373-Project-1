@@ -40,39 +40,55 @@ clientSocket.sendto(fileName.encode('utf-8'), (serverName, serverPort)) #will ne
 msg, Serveraddr = clientSocket.recvfrom(2048)
 msg = msg.decode('utf-8')
 filedata = ''
+clientSocket.settimeout(2)
+
 if(msg == '200'):
-    print('got that bish')
+    print('got that HTML')
     while(msg != 'done'):
         try:
-            clientSocket.settimeout(2)
             msg, Serveraddr = clientSocket.recvfrom(2048)
             msg = msg.decode('utf-8')
             filedata = filedata + msg          
-        except socket.timeout:
-            print('hitty witty')
+        except timeout:
+            #print('hitty witty')
             break #might lose data? but need in case we miss done
 
     
     parsedData = handledata(filedata)
-    print(parsedData)
-    print('broke out the gulag')
 
+    print('making image requests')
+    first = True
     for curFile in parsedData:
         clientSocket.sendto(curFile.encode('utf-8'), Serveraddr)
-        accumulatedData = ''
-        while(msg != 'done'):
+        accumulatedData = b''
+        while(1):
+            if(first):
+                clientSocket.settimeout(None)
+                first = False
+            else:
+                clientSocket.settimeout(0.1)
             try:
                 msg, Serveraddr = clientSocket.recvfrom(2048)
-                accumulatedData = accumulatedData + msg
-            except socket.timeout:
-                print('u r a failure')
+                try:
+                    msg.decode('utf-8')
+                    break   #this is the done message
+                except UnicodeDecodeError:
+                    accumulatedData = accumulatedData + msg #bytes will not decode properly so add them
+            except timeout:
+                #print('u r a failure')
                 break
-        file = open(curFile, "wb")
-        file.write(accumulatedData)
-        print('-------------')
-        print(file)  
+        try:
+            file = open(curFile, "wb")
+            file.write(accumulatedData)
+            #print(accumulatedData)
+            file.close()
+            #print('-------------') 
+        except OSError:
+            print('wrong format for: ', curFile)
+
     clientSocket.sendto('done'.encode('utf-8'), Serveraddr)
-    input('enter to close')
+    input('done pog enter to close, check image folder')
+
 elif(msg == '404'):
     print('did not find that')
     input('enter to close')

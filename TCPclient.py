@@ -1,9 +1,10 @@
-from socket import *
+from socket import * #include Python's socket library
+import sys
 from html.parser import HTMLParser
 
-serverName = 'localhost'
-serverPort = 12000
-buffer_size = 1024
+defaultFile = 'index.html'
+defaultPort = 3905
+defaultName = '127.0.0.1' #'compsci04.snc.edu'
 
 class MyHTMLParser(HTMLParser):
     def __init__(self):
@@ -21,35 +22,69 @@ def handledata(filedata):
     parser = MyHTMLParser()
     parser.feed(filedata)
     links = parser.links
-    print(links)
+    #print(links)
+    return links
 
-# Get filename from user
-filename = input("Enter file name: ")
+if len(sys.argv) == 4:
+    serverName = sys.argv[1]
+    serverPort = int(sys.argv[2])
+    fileName = sys.argv[3]
 
-# Create TCP socket
-clientSocket = socket(AF_INET, SOCK_STREAM)
-
-# Connect socket to server
-clientSocket.connect((serverName, serverPort))
-
-# Send filename to server
-clientSocket.send(filename.encode())
-
-# Receive response from server
-response = clientSocket.recv(buffer_size)
-
-if response.decode() == "File not found":
-    print("File not found on server")
 else:
-    print("File found on server")
-    filedata = ''
-    while True:
-        data = clientSocket.recv(buffer_size)
-        if not data:
-            break
-        filedata += data.decode(errors='ignore')
-    print(filedata)
-    handledata(filedata)
+    serverName = defaultName
+    serverPort = defaultPort
+    fileName = defaultFile
 
-# Close socket
-clientSocket.close()
+clientSocket = socket(AF_INET, SOCK_STREAM)
+clientSocket.connect((serverName,serverPort))
+
+clientSocket.send(fileName.encode('utf-8')) #will need to add command type ex) GET filename
+msg = clientSocket.recv(2048)
+msg = msg.decode('utf-8')
+filedata = ''
+
+if(msg == '200'):
+    print('got that HTML')
+    msg = ''  
+    while 'OURPASSWORDCODE' not in msg:
+        msg = clientSocket.recv(2048)
+        msg = msg.decode('utf-8')
+        filedata = filedata + msg
+        print(msg,'\n')
+    parsedData = handledata(filedata)
+
+    print('making image requests')
+    for curFile in parsedData:
+        clientSocket.send(curFile.encode('utf-8'))
+        accumulatedData = b'' 
+
+        while(1):
+            msg = clientSocket.recv(2048)
+            try:
+                msg.decode('utf-8')
+                break   #this is the done message
+            except UnicodeDecodeError:
+                accumulatedData = accumulatedData + msg #bytes will not decode properly so add them
+        try:
+            file = open(curFile, "wb")
+            file.write(accumulatedData)
+            #print(accumulatedData)
+            file.close()
+            #print('-------------') 
+        except OSError:
+            print('wrong format for: ', curFile)      
+
+    clientSocket.send('OURPASSWORDCODE'.encode('utf-8'))
+    input('done pog enter to close, check image folder')
+
+    clientSocket.close()
+
+elif(msg == '404'):
+    print('did not find that')
+    input('enter to close')
+    sys.exit()
+
+                
+
+
+
