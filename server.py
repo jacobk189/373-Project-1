@@ -54,6 +54,38 @@ else:
     serverSocket.sendto(msg.encode('utf-8'), addr)
     print("after sent file")
     #serverSocket.sendto(fname, addr)
+    serverSocket.settimeout(None)
+    msg, addr = serverSocket.recvfrom(2048)
+    msg = msg.decode('utf-8')
+    print(msg)
+    imgFile = open(msg,"rb")
+    imgData = imgFile.read()
+    while i < len(imgData):
+        if(i+buffer_size<len(imgData)-1):
+            msg = imgData[i:i+buffer_size]
+        else:
+            msg = imgData[i:len(imgData)-1]
+        i = i+buffer_size
+        serverSocket.sendto(msg.encode('utf-8'), addr)
+    serverSocket.sendto('done'.encode('utf-8'), addr)
+    msg = ''
+    while (msg != 'done'):
+        try:
+            serverSocket.settimeout(2)
+            msg, addr = serverSocket.recvfrom(2048)
+            msg = msg.decode('utf-8')
+            imgFile = open(msg,"rb")
+            imgData = imgFile.read()
+            while i < len(imgData):
+                if(i+buffer_size<len(imgData)-1):
+                    msg = imgData[i:i+buffer_size]
+                else:
+                    msg = imgData[i:len(imgData)-1]
+                i = i+buffer_size
+                serverSocket.sendto(msg.encode('utf-8'), addr)
+            serverSocket.sendto('done'.encode('utf-8'), addr)    
+        except socket.timeout:
+            break #might lose data? but need in case we miss done
 
 input('enter to close')
 
