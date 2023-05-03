@@ -1,28 +1,17 @@
 # UDPserver
 from socket import *
 import sys
-import time
 serverPort = 3905
 buffer_size = 200
 
     # Read html file into string
 def readHTML(inFile):
-	with open(inFile, 'r', encoding='utf-8') as htmlfile:
+	with open(inFile, 'r',encoding='utf-8') as htmlfile:
 		data = htmlfile.read()
 	return data
 
 #connection_type = input('What type of connection are you running? 1 for UDP 1 connection. 2 for TCP 1 connection. 3 for UDP 5 parallel connections. 4 for TCP 5 parallel connections.\n')
 #do some if statments for each input
-fname = 'index.html'
-defaultPort = 3905
-
-if len(sys.argv) == 4:
-    serverPort = int(sys.argv[2])
-    fileName = sys.argv[3]
-
-else:
-    serverPort = defaultPort
-    fileName = fname
 
 # Create UDP socket
 serverSocket = socket(AF_INET, SOCK_DGRAM)
@@ -34,20 +23,29 @@ msg, addr = serverSocket.recvfrom(2048)
 msg = msg.decode('utf-8')
 
 
-if (msg != fname):
-    serverSocket.sendto('404'.encode('utf-8'), addr)
+fname = 'index.html'
+defaultPort = 3905
+
+if len(sys.argv) == 4:
+    serverPort = int(sys.argv[2])
+    fileName = sys.argv[3]
+
 else:
-    serverSocket.sendto('200'.encode('utf-8'), addr)
+    serverPort = defaultPort
+    fileName = fname
+
+if (msg != fname):
+    serverSocket.sendto('404'.encode(), addr)
+else:
+    serverSocket.sendto('200'.encode(), addr)
     print("sent 200")
     file_data = readHTML(fname)
     i = 0
-
     while i < len(file_data):
-        if(i+buffer_size<len(file_data)):
+        if(i+buffer_size<len(file_data)-1):
             msg = file_data[i:i+buffer_size]
         else:
-            msg = file_data[i:len(file_data)]
-
+            msg = file_data[i:len(file_data)-1]
         i = i+buffer_size
         serverSocket.sendto(msg.encode('utf-8'), addr)
         print("sent from server: ", msg)
@@ -55,34 +53,7 @@ else:
     msg = 'done'
     serverSocket.sendto(msg.encode('utf-8'), addr)
     print("after sent file")
-    
-    first = True
+    #serverSocket.sendto(fname, addr)
 
-    while (1):
-        if(first):
-            serverSocket.settimeout(None)
-            first = False
-        else:
-            serverSocket.settimeout(2)
-        try:
-            msg, addr = serverSocket.recvfrom(2048)
-            msg = msg.decode('utf-8')
-            try:
-                imgFile = open(msg,"rb")
-                imgData = imgFile.read()
-                i = 0
-                while i < len(imgData):
-                    if(i+buffer_size<len(imgData)):
-                        msg = imgData[i:i+buffer_size]
-                    else:
-                        msg = imgData[i:len(imgData)]
-                    i = i+buffer_size
-                    serverSocket.sendto(msg, addr)
-                serverSocket.sendto('done'.encode('utf-8'), addr)    
-            except FileNotFoundError: 
-                time.sleep(0.6)
-        except timeout:
-            break #might lose data? but need in case we miss done
-
-input('done pog enter to close')
+input('enter to close')
 

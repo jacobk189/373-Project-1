@@ -22,6 +22,7 @@ def handledata(filedata):
     parser = MyHTMLParser()
     parser.feed(filedata)
     links = parser.links
+    #print(links)
     return links
 
 if len(sys.argv) == 4:
@@ -35,20 +36,19 @@ else:
     fileName = defaultFile
 
 clientSocket = socket(AF_INET, SOCK_DGRAM)
-clientSocket.sendto(fileName.encode('utf-8'), (serverName, serverPort)) #will need to add command type ex) GET filename
+clientSocket.sendto(fileName.encode(), (serverName, serverPort)) #will need to add command type ex) GET filename
 msg, Serveraddr = clientSocket.recvfrom(2048)
 msg = msg.decode('utf-8')
 filedata = ''
-clientSocket.settimeout(2)
-
 if(msg == '200'):
-    print('got that HTML')
+    print('got that bish')
     while(msg != 'done'):
         try:
             msg, Serveraddr = clientSocket.recvfrom(2048)
             msg = msg.decode('utf-8')
             filedata = filedata + msg          
         except timeout:
+            #print('hitty witty')
             break #might lose data? but need in case we miss done
 
     
@@ -73,11 +73,14 @@ if(msg == '200'):
                 except UnicodeDecodeError:
                     accumulatedData = accumulatedData + msg #bytes will not decode properly so add them
             except timeout:
+                #print('u r a failure')
                 break
         try:
             file = open(curFile, "wb")
             file.write(accumulatedData)
-            file.close() 
+            #print(accumulatedData)
+            file.close()
+            #print('-------------') 
         except OSError:
             print('wrong format for: ', curFile)
 
@@ -85,11 +88,36 @@ if(msg == '200'):
     input('done pog enter to close, check image folder')
 
 elif(msg == '404'):
-    print('did not find that')
+    print('did not find that hoe')
     input('enter to close')
     sys.exit()
 
 
+    # curFile = parsedData[0]
+    # clientSocket.settimeout(None)
+    # print('i am sending', curFile)
+    # clientSocket.sendto(curFile.encode('utf-8'), Serveraddr)
+    # msg, Serveraddr = clientSocket.recvfrom(2048)
+    # msg = msg.decode('utf-8')
+    # print(msg)
+    # file = open(curFile,"wb")
+    # file.write(msg)
+    # print('-------------')
+    # print(file)          
+
+    # for curFile in parsedData:
+    #     clientSocket.sendto(curFile.encode('utf-8'), Serveraddr)
+    #     try:
+    #         msg, Serveraddr = clientSocket.recvfrom(2048)
+    #         msg = msg.decode('utf-8')
+    #         print(msg)
+    #         file = open(curFile,"wb")
+    #         file.write(msg)
+    #         print('-------------')
+    #         print(file)          
+    #     except socket.timeout:
+    #         print('hitty witty')
+    #         break #might lose data? but need in case we miss done
         
 
  
