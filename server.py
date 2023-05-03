@@ -55,7 +55,6 @@ else:
     msg = 'done'
     serverSocket.sendto(msg.encode('utf-8'), addr)
     print("after sent file")
-    #serverSocket.sendto(fname, addr)
     
     first = True
 
@@ -78,7 +77,6 @@ else:
                     else:
                         msg = imgData[i:len(imgData)]
                     i = i+buffer_size
-                    #print(msg)
                     serverSocket.sendto(msg, addr)
                 serverSocket.sendto('done'.encode('utf-8'), addr)    
             except FileNotFoundError: 

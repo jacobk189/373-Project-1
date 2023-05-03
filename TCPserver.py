@@ -2,7 +2,6 @@ from socket import *
 import sys
 import time
 
-
 serverPort = 12000
 buffer_size = 1024
 
@@ -79,10 +78,11 @@ else:
                     msg = imgData[i:i+buffer_size]
                 else:
                     msg = imgData[i:len(imgData)]
+
                 i = i+buffer_size
-                #print(msg)
                 connectionSocket.send(msg)
                 print('sending ', imgFile, '\n')
+                
             connectionSocket.send('done'.encode('utf-8'))    
         except FileNotFoundError: 
             connectionSocket.send('done'.encode('utf-8'))

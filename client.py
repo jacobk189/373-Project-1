@@ -22,7 +22,6 @@ def handledata(filedata):
     parser = MyHTMLParser()
     parser.feed(filedata)
     links = parser.links
-    #print(links)
     return links
 
 if len(sys.argv) == 4:
@@ -50,7 +49,6 @@ if(msg == '200'):
             msg = msg.decode('utf-8')
             filedata = filedata + msg          
         except timeout:
-            #print('hitty witty')
             break #might lose data? but need in case we miss done
 
     
@@ -75,14 +73,11 @@ if(msg == '200'):
                 except UnicodeDecodeError:
                     accumulatedData = accumulatedData + msg #bytes will not decode properly so add them
             except timeout:
-                #print('u r a failure')
                 break
         try:
             file = open(curFile, "wb")
             file.write(accumulatedData)
-            #print(accumulatedData)
-            file.close()
-            #print('-------------') 
+            file.close() 
         except OSError:
             print('wrong format for: ', curFile)
 
@@ -95,31 +90,6 @@ elif(msg == '404'):
     sys.exit()
 
 
-    # curFile = parsedData[0]
-    # clientSocket.settimeout(None)
-    # print('i am sending', curFile)
-    # clientSocket.sendto(curFile.encode('utf-8'), Serveraddr)
-    # msg, Serveraddr = clientSocket.recvfrom(2048)
-    # msg = msg.decode('utf-8')
-    # print(msg)
-    # file = open(curFile,"wb")
-    # file.write(msg)
-    # print('-------------')
-    # print(file)          
-
-    # for curFile in parsedData:
-    #     clientSocket.sendto(curFile.encode('utf-8'), Serveraddr)
-    #     try:
-    #         msg, Serveraddr = clientSocket.recvfrom(2048)
-    #         msg = msg.decode('utf-8')
-    #         print(msg)
-    #         file = open(curFile,"wb")
-    #         file.write(msg)
-    #         print('-------------')
-    #         print(file)          
-    #     except socket.timeout:
-    #         print('hitty witty')
-    #         break #might lose data? but need in case we miss done
         
 
  

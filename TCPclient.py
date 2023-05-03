@@ -51,9 +51,10 @@ if(msg == '200'):
         msg = msg.decode('utf-8')
         filedata = filedata + msg
         print(msg,'\n')
-    parsedData = handledata(filedata)
 
+    parsedData = handledata(filedata)
     print('making image requests')
+
     for curFile in parsedData:
         clientSocket.send(curFile.encode('utf-8'))
         accumulatedData = b'' 
@@ -68,9 +69,7 @@ if(msg == '200'):
         try:
             file = open(curFile, "wb")
             file.write(accumulatedData)
-            #print(accumulatedData)
             file.close()
-            #print('-------------') 
         except OSError:
             print('wrong format for: ', curFile)      
 
